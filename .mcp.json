@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "prospectsradar": {
+      "type": "http",
+      "url": "https://app.prospectsradar.com/mcp"
+    }
+  }
+}
