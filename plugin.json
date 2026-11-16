@@ -1,0 +1,90 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "prospectsradar",
+  "version": "0.1.0",
+  "description": "Sales workflows on your ProspectsRadar account: a daily briefing, prospect briefs before a call, pipeline reviews, outreach planning across the buying committee, and ICP tuning.",
+  "author": { "name": "Enterprise Modules B.V.", "url": "https://prospectsradar.com" },
+  "homepage": "https://prospectsradar.com",
+  "repository": "https://github.com/prospects-radar/claude-plugin",
+  "license": "MIT",
+  "keywords": ["sales", "prospecting", "b2b", "buying-signals", "icp", "pipeline"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "ProspectsRadar",
+        "shortDescription": "Find and work B2B prospects",
+        "longDescription": "ProspectsRadar finds companies that fit your ideal customer profile, scores how well each one fits and how ready it is to buy, tracks buying signals such as new hires, funding, expansion and tenders, and maps the people on the buying committee.\n\nWith this plugin, ChatGPT works directly on your ProspectsRadar account. Ask for today's strongest prospects, a brief on a company before a call, or a review of where your pipeline stands. ChatGPT can look up decision makers and influencers, read recent company news, create outreach tasks, follow or drop prospects, and fine-tune the industries, regions and company sizes your profile targets.\n\nEvery change is previewed first and only saved after you confirm. ChatGPT sees only the account and products your login gives it access to. The plugin never sends email or LinkedIn messages on your behalf: outreach lands as tasks in ProspectsRadar.\n\nRequires a ProspectsRadar account. Start a trial at prospectsradar.com.",
+        "developerName": "Enterprise Modules B.V.",
+        "category": "Business & Operations",
+        "capabilities": [
+          "Daily briefing of new buying signals and tasks due",
+          "One-page brief on a prospect before a call",
+          "Pipeline review with follow and cleanup proposals",
+          "Outreach plan across the buying committee, saved as tasks",
+          "Diagnose and adjust ideal customer profiles"
+        ],
+        "websiteURL": "https://prospectsradar.com",
+        "supportURL": "https://prospectsradar.com/contact",
+        "privacyPolicyURL": "https://app.prospectsradar.com/privacy",
+        "termsOfServiceURL": "https://app.prospectsradar.com/terms-of-service",
+        "defaultPrompt": [
+          "What should I work on today in ProspectsRadar?",
+          "Prepare me for a call with my top prospect",
+          "Review my pipeline and tell me what to clean up"
+        ],
+        "logo": "./assets/icon.png",
+        "composerIcon": "./assets/icon.png"
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Daily briefing",
+              "prompt": "What should I work on today in ProspectsRadar?",
+              "tools_triggered": ["pipeline_stats", "list_tasks", "get_buying_signals", "get_prospect"],
+              "expected_behavior": "Returns at most five ranked actions, each naming the company, the signal with its date and a next step, followed by due tasks and a one-line pipeline summary. Changes nothing."
+            },
+            {
+              "description": "Prospect brief before a call",
+              "prompt": "Brief me on my highest scoring prospect before I call them",
+              "tools_triggered": ["search_prospects", "get_prospect", "list_stakeholders", "get_buying_signals", "list_tasks"],
+              "expected_behavior": "Finds the top prospect and writes a brief covering fit and score drivers, recent signals with dates, the buying committee, open tasks and a suggested opening angle, using only data from the tools."
+            },
+            {
+              "description": "Pipeline review",
+              "prompt": "Review my pipeline. Which strong prospects is nobody following yet?",
+              "tools_triggered": ["list_products", "pipeline_stats", "search_prospects", "get_buying_signals"],
+              "expected_behavior": "Lists neutral prospects with a high score per product, flags followed prospects without recent signals, and proposes changes without applying them."
+            },
+            {
+              "description": "Create outreach tasks with confirmation",
+              "prompt": "Plan outreach to the decision makers at my top prospect and create the tasks",
+              "tools_triggered": ["get_prospect", "list_stakeholders", "list_tasks", "create_task"],
+              "expected_behavior": "Proposes stakeholders, channels and short drafts, calls create_task with dry_run true to preview, and only commits with dry_run false after the user confirms. Sends no messages."
+            },
+            {
+              "description": "Inspect ideal customer profile",
+              "prompt": "Why am I getting so many low scoring prospects? Look at my ideal customer profile.",
+              "tools_triggered": ["list_products", "pipeline_stats", "search_prospects", "search_industry_codes"],
+              "expected_behavior": "Compares the profile with what it produces, names the likely cause, and proposes concrete changes using looked-up industry codes. Applies nothing without confirmation."
+            }
+          ],
+          "negative": [
+            {
+              "description": "General sales advice without account data",
+              "prompt": "Write me a generic cold email template for selling software"
+            },
+            {
+              "description": "Sending email directly",
+              "prompt": "Send an email to the CEO of Acme right now"
+            },
+            {
+              "description": "Unrelated request",
+              "prompt": "What is the weather in Amsterdam tomorrow?"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Packs the ChatGPT plugin ZIP: one top-level folder with the portable
+# plugin.json, mcp.json, skills and assets. The Claude manifest and .mcp.json
+# stay out so ChatGPT finds only one manifest.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+version=$(ruby -rjson -e 'puts JSON.parse(File.read("plugin.json"))["version"]')
+out="dist/prospectsradar-chatgpt-${version}.zip"
+stage=$(mktemp -d)
+trap 'rm -rf "$stage"' EXIT
+
+mkdir -p "$stage/prospectsradar" dist
+cp -R plugin.json mcp.json skills assets README.md LICENSE "$stage/prospectsradar/"
+find "$stage" -name .DS_Store -delete
+rm -f "$out"
+(cd "$stage" && zip -qr - prospectsradar) > "$out"
+echo "$out"

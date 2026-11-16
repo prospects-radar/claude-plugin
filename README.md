@@ -1,6 +1,6 @@
-# ProspectsRadar for Claude
+# ProspectsRadar for Claude and ChatGPT
 
-Work your [ProspectsRadar](https://prospectsradar.com) pipeline from Claude. ProspectsRadar finds B2B companies that match your ideal customer profile, scores them, tracks their buying signals and maps the buying committee. This plugin connects Claude to your account and adds five sales workflows on top of that data.
+Work your [ProspectsRadar](https://prospectsradar.com) pipeline from Claude or ChatGPT. ProspectsRadar finds B2B companies that match your ideal customer profile, scores them, tracks their buying signals and maps the buying committee. This plugin connects the assistant to your account and adds five sales workflows on top of that data.
 
 ## Skills
 
@@ -31,3 +31,12 @@ Data flows only between Claude and ProspectsRadar. See the [privacy policy](http
 ## Support
 
 https://prospectsradar.com/contact · Documentation: https://docs.prospectsradar.com
+
+## Packaging
+
+One repository serves both directories:
+
+- **Claude** reads `.claude-plugin/plugin.json` and `.mcp.json`. Submit the repository in the Claude directory portal.
+- **ChatGPT** reads the portable `plugin.json` and `mcp.json`. Run `bin/build-chatgpt-zip` and upload `dist/prospectsradar-chatgpt-<version>.zip` at platform.openai.com/plugins.
+
+Both share `skills/` and `assets/`. Raise `version` in both manifests on every release.
