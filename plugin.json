@@ -5,7 +5,7 @@
   "description": "Sales workflows on your ProspectsRadar account: a daily briefing, prospect briefs before a call, pipeline reviews, outreach planning across the buying committee, and ICP tuning.",
   "author": { "name": "Enterprise Modules B.V.", "url": "https://prospectsradar.com" },
   "homepage": "https://prospectsradar.com",
-  "repository": "https://github.com/prospects-radar/claude-plugin",
+  "repository": "https://github.com/prospects-radar/ai-plugin",
   "license": "MIT",
   "keywords": ["sales", "prospecting", "b2b", "buying-signals", "icp", "pipeline"],
   "extensions": {
